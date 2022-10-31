@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Registration from './auth/registration';
 
 
 class Home extends Component {
@@ -7,6 +8,7 @@ class Home extends Component {
         <div>
             <div>
                 <h1>Home component</h1>
+                <Registration />
             </div>
         </div>
         );
