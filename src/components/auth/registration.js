@@ -1,80 +1,75 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect} from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-class Registration extends Component {
-    constructor(props) {
-        super(props);
+const Registration= (props) => {
 
-        this.state = {
-            email: "",
-            password: "",
-            password_confirmation: "",
-            registrationErrors: ""
+        const navigate = useNavigate()
+        const [user, setUser] = useState({})
+        const [registrationErrors, setRegistrationErrors] = useState("")
+
+        useEffect(()  =>{
+
+            setUser({email:"",password:"",password_confirmation:""})
+        },[])
+
+        const handleChange = (e) => {
+            e.preventDefault()
+            setUser(Object.assign({}, user, {[e.target.name]: e.target.value}))
+
+          }
+
+        const handleSubmit = (e) => {
+            
+            axios.post("http://localhost:3000/registrations"
+            , {
+                user: {
+                    email: user.email,
+                    password: user.password,
+                    password_confirmation: user.password_confirmation
+                }
+            },
+            {withCredentials: true}
+            )
+            .then(response => {
+                if (response.data.status ==='created'){
+                    console.log("creadteddd")
+                    props.handleSuccesfullAuth(response.data)
+                }
+            })
+            .catch(error => {
+                console.log("registration error", error.code)
+            })
+
+            e.preventDefault();
+
         }
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
 
-    }
-    handleSubmit(event) {
-        const {
-            email,
-            password,
-            password_confirmation
-        } = this.state
-
-        axios.post("http://localhost:3000/registrations"
-        , {
-            user: {
-                email: email,
-                password: password,
-                password_confirmation: password_confirmation
-            }
-        },
-        {withCredentials: true}
-        )
-        .then(response => {
-            console.log("registration resp", response)
-        })
-        .catch(error => {
-            console.log("registration error", error.code)
-        })
-
-        event.preventDefault();
-
-    }
-
-    handleChange(event){
-
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-    }
-    render() { 
-        return ( 
+          return ( 
             <div>
-                <form onSubmit={this.handleSubmit} >
+                <form onSubmit={handleSubmit}>
 
                     <input type="email" 
                         name="email"
                         placeholder="Email"
-                        value={this.state.email} 
-                        onChange={this.handleChange} 
+                        value={user.email || ""} 
+                        onChange={handleChange} 
                         required 
                     />
 
                     <input type="password" 
                         name="password"
                         placeholder="Password"
-                        value={this.state.password} 
-                        onChange={this.handleChange} 
+                        value={user.password || ""} 
+                        onChange={handleChange} 
                         required 
                     />
 
                     <input type="password" 
                         name="password_confirmation"
                         placeholder="Password confirmation"
-                        value={this.state.password_confirmation} 
-                        onChange={this.handleChange} 
+                        value={user.password_confirmation || ""} 
+                        onChange={handleChange} 
                         required 
                     />
 
@@ -82,7 +77,7 @@ class Registration extends Component {
                 </form>
             </div>
          );
+
     }
-}
- 
+
 export default Registration;
