@@ -1,3 +1,1 @@
-# Skeleton React starter Project
-
-> Provided for the students of the [Bottega Code School](https://bottega.tech/)
+#  SPA creada con React con conexion con una API en RoR
