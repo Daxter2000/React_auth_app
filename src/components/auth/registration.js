@@ -21,7 +21,7 @@ const Registration= (props) => {
 
         const handleSubmit = (e) => {
             
-            axios.post("http://localhost:3000/registrations"
+            axios.post("http://localhost:3000/auth/registrations"
             , {
                 user: {
                     email: user.email,
@@ -35,6 +35,7 @@ const Registration= (props) => {
                 if (response.data.status ==='created'){
                     console.log("creadteddd")
                     props.handleSuccesfullAuth(response.data)
+                    navigate("/home")
                 }
             })
             .catch(error => {

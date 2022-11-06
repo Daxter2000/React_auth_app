@@ -21,12 +21,11 @@ const Login= (props) => {
 
         const handleSubmit = (e) => {
             
-            axios.post("http://localhost:3000/sessions"
+            axios.post("http://localhost:3000/auth/sessions"
             , {
                 user: {
                     email: user.email,
-                    password: user.password,
-                    password_confirmation: user.password_confirmation
+                    password: user.password
                 }
             },
             {withCredentials: true}
@@ -35,10 +34,11 @@ const Login= (props) => {
                 if (response.data.logged_in){
                     console.log("Iniciada sesion")
                     props.handleSuccesfullAuth(response.data)
-                }
+                    navigate(-1)
+                            }
             })
             .catch(error => {
-                console.log("registration error", error.code)
+                console.log("Login error", error)
             })
 
             e.preventDefault();
